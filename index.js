@@ -4,7 +4,7 @@ const cors = require('cors');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 
-// load env variables from .env files
+
 dotenv.config();
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
@@ -15,8 +15,8 @@ const port = process.env.PORT || 5000;
 
 
 const allowedOrigins = [
-    'http://localhost:5173', // local frontend
-    'https://health-hub-7c64c.web.app', // deployed frontend
+    'http://localhost:5173',
+    'https://health-hub-7c64c.web.app', 
 ];
 
 const corsOptions = {
