@@ -12,31 +12,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Configure allowed origins
-// const allowedOrigins = process.env.NODE_ENV === 'production'
-//     ? ['https://health-hub-7c64c.web.app']
-//     : ['http://localhost:5173'];
 
-// // Replace your entire CORS section with this:
-// const corsOptions = {
-//     origin: function (origin, callback) {
-//         const allowedOrigins = [
-//             'http://localhost:5173',
-//             'https://health-hub-7c64c.web.app'
-//         ];
-
-//         if (!origin || allowedOrigins.includes(origin)) {
-//             callback(null, true);
-//         } else {
-//             console.error('Blocked by CORS:', origin); // 👈 good for debugging
-//             callback(new Error('Not allowed by CORS'));
-//         }
-//     },
-//     credentials: true,
-//     optionsSuccessStatus: 200,
-//     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-//     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-// };
 
 const allowedOrigins = [
   'http://localhost:5173', // local frontend
