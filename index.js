@@ -13,52 +13,53 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // Configure allowed origins
-const allowedOrigins = process.env.NODE_ENV === 'production'
-    ? ['https://health-hub-7c64c.web.app']
-    : ['http://localhost:5173'];
+// const allowedOrigins = process.env.NODE_ENV === 'production'
+//     ? ['https://health-hub-7c64c.web.app']
+//     : ['http://localhost:5173'];
 
-// Replace your entire CORS section with this:
+// // Replace your entire CORS section with this:
+// const corsOptions = {
+//     origin: function (origin, callback) {
+//         const allowedOrigins = [
+//             'http://localhost:5173',
+//             'https://health-hub-7c64c.web.app'
+//         ];
+
+//         if (!origin || allowedOrigins.includes(origin)) {
+//             callback(null, true);
+//         } else {
+//             console.error('Blocked by CORS:', origin); // 👈 good for debugging
+//             callback(new Error('Not allowed by CORS'));
+//         }
+//     },
+//     credentials: true,
+//     optionsSuccessStatus: 200,
+//     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+//     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+// };
+
+const allowedOrigins = [
+  'http://localhost:5173', // local frontend
+  'https://health-hub-7c64c.web.app', // deployed frontend
+];
+
 const corsOptions = {
-    origin: function (origin, callback) {
-        const allowedOrigins = [
-            'http://localhost:5173',
-            'https://health-hub-7c64c.web.app'
-        ];
-
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            console.error('Blocked by CORS:', origin); // 👈 good for debugging
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    credentials: true,
-    optionsSuccessStatus: 200,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like Postman)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.error('Blocked by CORS:', origin);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
 };
-
-
 
 
 
 app.use(cors(corsOptions));
 app.use(express.json());
-
-// middleware
-// app.use(cors({
-//         origin: allowedOrigin, //  Use your frontend origin here
-//         credentials: true               //  Allow credentials (cookies, headers, etc.)
-//     }));
-
-// app.use(cors({
-//   origin: '*', // Allow all origins (not recommended for production)
-//   credentials: false // Must be false if origin is '*'
-// }));
-// Apply CORS middleware
-
-
-
 
 
 
