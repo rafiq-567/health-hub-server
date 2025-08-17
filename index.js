@@ -453,6 +453,21 @@ async function run() {
             }
         });
 
+        // Add this new route to your server file
+        app.get('/advertised-medicines/seller', async (req, res) => {
+            try {
+                const { email } = req.query;
+                if (!email) {
+                    return res.status(400).send({ message: 'Seller email is required' });
+                }
+
+                const advertisements = await sliderCollection.find({ sellerEmail: email }).toArray();
+                res.status(200).send(advertisements);
+            } catch (error) {
+                console.error('Error fetching seller advertisements:', error);
+                res.status(500).send({ message: 'Failed to fetch advertisements' });
+            }
+        });
 
 
 
