@@ -13,29 +13,29 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // Configure allowed origins
-const allowedOrigins = process.env.NODE_ENV === 'production' 
-  ? ['https://health-hub-7c64c.web.app'] 
-  : ['http://localhost:5173'];
+const allowedOrigins = process.env.NODE_ENV === 'production'
+    ? ['https://health-hub-7c64c.web.app']
+    : ['http://localhost:5173'];
 
 // Replace your entire CORS section with this:
 const corsOptions = {
-  origin: function (origin, callback) {
-    const allowedOrigins = [
-      'http://localhost:5173',
-      'https://health-hub-7c64c.web.app'
-    ];
+    origin: function (origin, callback) {
+        const allowedOrigins = [
+            'http://localhost:5173',
+            'https://health-hub-7c64c.web.app'
+        ];
 
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      console.error('Blocked by CORS:', origin); // 👈 good for debugging
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
-  optionsSuccessStatus: 200,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            console.error('Blocked by CORS:', origin); // 👈 good for debugging
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+    optionsSuccessStatus: 200,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
 };
 
 
@@ -77,7 +77,7 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
-      
+
 
         const db = client.db('healthHubDB');//database name
         const healthHubCollection = db.collection('healthHub') // collection
@@ -436,6 +436,33 @@ async function run() {
             } catch (error) {
                 console.error('Error fetching admin stats:', error);
                 res.status(500).send({ message: 'Failed to fetch admin stats' });
+            }
+        });
+
+        // bestSeller section
+        // backend/routes/medicineRoutes.js
+        // app.get("/best-sellers", async (req, res) => {
+        //     try {
+        //        const bestSellers = await healthHubCollection.find({ bestSeller: true }).limit(8).toArray();
+
+        //         res.json(bestSellers);
+        //     } catch (err) {
+        //         res.status(500).json({ error: "Failed to fetch best sellers" });
+        //     }
+        // });
+
+        // Best Sellers API
+        app.get("/best-sellers", async (req, res) => {
+            try {
+                const bestSellers = await healthHubCollection
+                    .find({ bestSeller: true }) // fetch only marked best sellers
+                    .limit(8) // limit results
+                    .toArray();
+
+                res.send(bestSellers);
+            } catch (error) {
+                console.error("Error fetching best sellers:", error);
+                res.status(500).send({ message: "Server error" });
             }
         });
 
