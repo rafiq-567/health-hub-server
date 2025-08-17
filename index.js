@@ -15,21 +15,21 @@ const port = process.env.PORT || 5000;
 
 
 const allowedOrigins = [
-  'http://localhost:5173', // local frontend
-  'https://health-hub-7c64c.web.app', // deployed frontend
+    'http://localhost:5173', // local frontend
+    'https://health-hub-7c64c.web.app', // deployed frontend
 ];
 
 const corsOptions = {
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like Postman)
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      console.error('Blocked by CORS:', origin);
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like Postman)
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            console.error('Blocked by CORS:', origin);
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
 };
 
 
@@ -201,6 +201,26 @@ async function run() {
             res.send({ role: result?.role })
         })
 
+        // This route fetches a single user document by their email
+        app.get('/user/email/:email', async (req, res) => {
+            try {
+                const userEmail = req.params.email; // Get the email from the URL
+
+                // Make sure you are using the correct collection name
+                const user = await usersCollection.findOne({ email: userEmail });
+
+                if (user) {
+                    // If a user is found, send their entire data object back
+                    res.status(200).send(user);
+                } else {
+                    // If no user is found, send a 404 response
+                    res.status(404).send({ message: 'User not found' });
+                }
+            } catch (error) {
+                console.error("Error fetching user by email:", error);
+                res.status(500).send({ message: 'Internal Server Error' });
+            }
+        });
 
         app.get("/categories", async (req, res) => {
             try {
@@ -416,7 +436,7 @@ async function run() {
             }
         });
 
-        
+
 
         // Best Sellers API
         app.get("/best-sellers", async (req, res) => {
