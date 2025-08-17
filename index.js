@@ -439,17 +439,7 @@ async function run() {
             }
         });
 
-        // bestSeller section
-        // backend/routes/medicineRoutes.js
-        // app.get("/best-sellers", async (req, res) => {
-        //     try {
-        //        const bestSellers = await healthHubCollection.find({ bestSeller: true }).limit(8).toArray();
-
-        //         res.json(bestSellers);
-        //     } catch (err) {
-        //         res.status(500).json({ error: "Failed to fetch best sellers" });
-        //     }
-        // });
+        
 
         // Best Sellers API
         app.get("/best-sellers", async (req, res) => {
